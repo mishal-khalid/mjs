@@ -1,0 +1,59 @@
+{
+  "students": [
+    {
+      "id": "st-1001",
+      "full_name": "Ibrahim N.",
+      "grade": "10",
+      "class": "10A"
+    },
+    {
+      "id": "st-1002",
+      "full_name": "Aishath R.",
+      "grade": "10",
+      "class": "10B"
+    },
+    {
+      "id": "st-1003",
+      "full_name": "Fathimath M.",
+      "grade": "10",
+      "class": "10C"
+    },
+    {
+      "id": "st-1004",
+      "full_name": "Mohamed S.",
+      "grade": "10",
+      "class": "10A"
+    },
+    {
+      "id": "st-1005",
+      "full_name": "Zahra A.",
+      "grade": "10",
+      "class": "10B"
+    },
+    {
+      "id": "st-1006",
+      "full_name": "Ahmed L.",
+      "grade": "10",
+      "class": "10C"
+    },
+    {
+      "id": "st-1007",
+      "full_name": "Sara F.",
+      "grade": "9",
+      "class": "9A"
+    },
+    {
+      "id": "st-1008",
+      "full_name": "Hassan K.",
+      "grade": "8",
+      "class": "8B"
+    },
+    {
+      "id": "st-1009",
+      "full_name": "Laila D.",
+      "grade": "7",
+      "class": "7C"
+    }
+    
+  ]
+}

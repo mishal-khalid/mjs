@@ -1,0 +1,45 @@
+{
+  "elections": [
+    {
+      "id": "el-2026-captain",
+      "title": "School Captain 2026",
+      "description": "Vote for your School Captain.",
+      "start_at": "2025-10-30T09:00:00Z",
+      "end_at": "2025-10-31T12:00:00Z",
+      "visibility": "school",
+      "positions": [
+        {
+          "id": "pos-captain",
+          "name": "School Captain",
+          "slots": 1,
+          "max_choices": 1,
+          "candidates": [
+            {
+              "id": "cand-fathimath",
+              "full_name": "Fathimath Fathimath",
+              "class": "10A"
+            },
+            {
+              "id": "cand-mohamed",
+              "full_name": "Mohamed Ahmed Mohamed",
+              "class": "10B"
+            },
+            {
+              "id": "cand-ahmd",
+              "full_name": "Ahmed Ahmed Ahmed",
+              "class": "10C"
+            }
+          ]
+        }
+      ],
+      "eligibility": {
+        "grades": [
+          "7",
+          "8",
+          "9",
+          "10"
+        ]
+      }
+    }
+  ]
+}

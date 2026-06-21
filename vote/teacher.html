@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Teacher Verification – MJS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <a class="btn muted" href="index.html">← Back</a>
+    <h1>Teacher Verification</h1>
+    <div class="small">Search student and mark as verified.</div>
+    <hr>
+    <div class="row">
+      <select id="grade"></select>
+      <select id="cls"></select>
+      <input id="search" placeholder="Search student..." class="btn" style="flex:1" />
+    </div>
+    <div id="list" class="list" style="margin-top:12px"></div>
+  </div>
+
+  <script src="store.js"></script>
+  <script>
+  (async function(){
+    const p = new URLSearchParams(location.search);
+    const electionId = p.get("election");
+    const ballotId = p.get("ballot");
+    const students = (await (await fetch("students.json")).json()).students;
+
+    const grades = [...new Set(students.map(s=>s.grade))].sort();
+    const gradeSel = document.getElementById("grade");
+    gradeSel.innerHTML = `<option value="">All grades</option>` + grades.map(g=>`<option>${g}</option>`).join("");
+    const clsSel = document.getElementById("cls");
+    clsSel.innerHTML = `<option value="">All classes</option>`;
+    gradeSel.addEventListener("change", () => {
+      const cls = [...new Set(students.filter(s => !gradeSel.value || s.grade===gradeSel.value).map(s=>s.class))].sort();
+      clsSel.innerHTML = `<option value="">All classes</option>` + cls.map(c=>`<option>${c}</option>`).join("");
+      render();
+    });
+    clsSel.addEventListener("change", render);
+    document.getElementById("search").addEventListener("input", render);
+
+    function render(){
+      const q = document.getElementById("search").value.toLowerCase().trim();
+      const f = students.filter(s =>
+        (!gradeSel.value || s.grade===gradeSel.value) &&
+        (!clsSel.value || s.class===clsSel.value) &&
+        (!q || s.full_name.toLowerCase().includes(q))
+      );
+      document.getElementById("list").innerHTML = f.map(s=>{
+        const v = Store.isVerified(electionId, s.id);
+        return `<div class="card">
+          <div><b>${s.full_name}</b> <span class="small">• Grade ${s.grade} ${s.class}</span></div>
+          <div class="row" style="margin-top:8px">
+            ${v? '<span class="badge">Already verified</span>' :
+              `<button class="btn primary" data-id="${s.id}">Mark verified</button>`}
+          </div>
+        </div>`;
+      }).join("") || `<div class="small">No matches.</div>`;
+
+      [...document.querySelectorAll('[data-id]')].forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          Store.markVerified(electionId, btn.dataset.id);
+          const all = JSON.parse(localStorage.getItem("mjs_votes")||"{}");
+          const arr = all[electionId]||[];
+          const b = arr.find(x=>x.ballotId===ballotId);
+          if (b) b.verifiedStudentId = btn.dataset.id;
+          all[electionId] = arr;
+          localStorage.setItem("mjs_votes", JSON.stringify(all));
+          render();
+          alert("Vote verified & counted.");
+        });
+      });
+    }
+    render();
+  })();
+  </script>
+</body>
+</html>

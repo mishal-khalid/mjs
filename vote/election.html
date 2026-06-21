@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Vote – MJS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <a class="btn muted" href="index.html">← Back</a>
+    <h1 id="title">Election</h1>
+    <div id="desc" class="small"></div>
+    <hr>
+    <form id="ballot"></form>
+    <div class="row" style="margin-top:12px">
+      <button id="complete" class="btn primary" type="button">Complete</button>
+    </div>
+    <div class="footer">After “Complete”, a teacher must verify the student to count the vote.</div>
+  </div>
+
+  <script src="store.js"></script>
+  <script src="election.js"></script>
+</body>
+</html>
