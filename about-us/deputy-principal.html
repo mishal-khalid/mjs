@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hawwa Nazima - Deputy Principal of Mohamed Jamaluddin School, Academic In-charge.">
+    <title>Hawwa Nazima | Deputy Principal - MJS</title>
+    <link rel="shortcut icon" href="/assets/images/mjs-2.0-logo-light.png" type="image/x-icon">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/styles/index.css">
+
+    <!-- Profile page styles -->
+    <style>
+        .profile-main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .profile-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.2s ease;
+        }
+
+        .profile-back:hover { color: var(--accent-green); }
+
+        .profile-hero {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .profile-photo {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .profile-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-lime));
+            border-radius: 999px;
+            margin-bottom: 1rem;
+        }
+
+        .profile-name {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--text-primary);
+            margin: 0 0 0.5rem;
+        }
+
+        .profile-role {
+            font-size: 1.15rem;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin: 0 0 0.25rem;
+        }
+
+        .profile-subrole {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .profile-body {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2.5rem;
+        }
+
+        .profile-body h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin: 0 0 1rem;
+        }
+
+        .profile-body p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin: 0 0 1.25rem;
+            max-width: 70ch;
+        }
+
+        .profile-responsibilities {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0 0;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .profile-responsibilities li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .profile-responsibilities i {
+            color: var(--accent-green);
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 760px) {
+            .profile-hero { grid-template-columns: 1fr; text-align: center; }
+            .profile-photo { max-width: 260px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <a href="/index.html" class="navbar-logo">
+                <div class="logo-square">
+                    <img src="/assets/images/school-office-logo.png" alt="MJS Logo">
+                </div>
+                <span class="logo-text">MJS</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="nav-menu" id="nav-menu">
+                <li class="dropdown">
+                    <a href="#about">
+                        About <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/about-us/history.html">History</a>
+                        <a href="/about-us/leadership.html">Leadership</a>
+                        <a href="/about-us/smt.html">SMT</a>
+                        <a href="/about-us/educators.html">Educators</a>
+                        <a href="/about-us/framework.html">Framework</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#academics">
+                        Academics <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/academics/student-leadership.html">Student Leadership</a>
+                        <a href="/academics/prefect-board.html">Prefect Board</a>
+                        <a href="/academics/clubs-activities.html">Clubs & Activities</a>
+                        <a href="/academics/secondary-subjects.html">Subjects</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#resources">
+                        Resources <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/fehimaa/index.html">Fehimaa</a>
+                        <a href="/index.html">MJS 2.0</a>
+                        <a href="/contact.html">Contact</a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="nav-actions">
+                <a href="/fehimaa/index.html" class="btn-fehimaa">
+                    FEHIMAA <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <button class="btn-theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- PROFILE CONTENT -->
+    <main class="profile-main">
+        <a href="/about-us/smt.html" class="profile-back">
+            <i class="fa-solid fa-arrow-left"></i> Back to Senior Management Team
+        </a>
+
+        <div class="profile-hero">
+            <img src="/assets/images/deputy-principal-image.jpg" alt="Hawwa Nazima, Deputy Principal" class="profile-photo">
+            <div>
+                <span class="profile-badge">Senior Management Team</span>
+                <h1 class="profile-name">Hawwa Nazima</h1>
+                <p class="profile-role">Deputy Principal</p>
+                <p class="profile-subrole">Academic In-charge of the School</p>
+            </div>
+        </div>
+
+        <div class="profile-body">
+            <h2>About</h2>
+            <p>
+                Hawwa Nazima serves as the Deputy Principal of Mohamed Jamaluddin School and is the
+                Academic In-charge of the school. As a member of the Senior Management Team, she works
+                closely with the school's leadership to uphold the institution's academic standards and to
+                support the day-to-day running of teaching and learning across the school.
+            </p>
+            <p>
+                In her role as Academic In-charge, she helps guide the academic direction of the school —
+                coordinating with teachers, supporting students, and ensuring that the school's programmes
+                are delivered to a high standard in line with Mohamed Jamaluddin School's mission of
+                building excellence.
+            </p>
+
+            <h2>Areas of Responsibility</h2>
+            <ul class="profile-responsibilities">
+                <li><i class="fa-solid fa-circle-check"></i> Overseeing the academic operations and programmes of the school.</li>
+                <li><i class="fa-solid fa-circle-check"></i> Supporting and coordinating the teaching staff.</li>
+                <li><i class="fa-solid fa-circle-check"></i> Contributing to school leadership as part of the Senior Management Team.</li>
+                <li><i class="fa-solid fa-circle-check"></i> Helping maintain the academic standards and discipline of the school.</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- Brand -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-square-footer">
+                            <img src="/assets/images/school-office-logo.png" alt="MJS Logo">
+                        </div>
+                        <span>MJS</span>
+                    </div>
+                    <p class="footer-address">
+                        Gn. Fuvahmulah, Maldives<br>
+                        Building Excellence Since 1979
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/GN.MJS" target="_blank" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/MohamedJamaaludheenSchoolMJS/" target="_blank" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@hrmega" target="_blank" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>EXPLORE</h4>
+                        <a href="/about-us/history.html">History</a>
+                        <a href="/about-us/leadership.html">Leadership</a>
+                        <a href="/about-us/smt.html">SMT</a>
+                        <a href="/about-us/educators.html">Educators</a>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>ACADEMICS</h4>
+                        <a href="/academics/student-leadership.html">Student Leadership</a>
+                        <a href="/academics/prefect-board.html">Prefect Board</a>
+                        <a href="/academics/clubs-activities.html">Clubs & Activities</a>
+                        <a href="/academics/secondary-subjects.html">Subjects</a>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>RESOURCES</h4>
+                        <a href="/fehimaa/index.html">Fehimaa Bulletin</a>
+                        <a href="/index.html">MJS 2.0 Platform</a>
+                        <a href="/contact.html">Contact Us</a>
+                        <a href="/about-us/framework.html">Framework</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="footer-bottom">
+                <p>© 2025 Mohamed Jamaluddin School</p>
+                <p class="footer-credit">Created with love by <a href="https://vilaresco.mv" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline;">Vilares Technologies Pvt. Ltd.</a></p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- JavaScript Files -->
+    <script src="/scripts/index.js"></script>
+
+</body>
+</html>

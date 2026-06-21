@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Mohamed Jamaluddin School (MJS 2.0) - get in touch with us.">
+    <title>Contact Us | MJS 2.0</title>
+    <link rel="shortcut icon" href="/assets/images/mjs-2.0-logo-light.png" type="image/x-icon">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/styles/index.css">
+
+    <!-- Contact page styles -->
+    <style>
+        .contact-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .contact-hero {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .contact-hero h1 {
+            font-size: clamp(2.25rem, 5vw, 3.25rem);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .contact-hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        .contact-info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            text-decoration: none;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-card .icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-lime));
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin: 0 0 0.25rem;
+        }
+
+        .contact-card p,
+        .contact-card a {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .contact-card a:hover {
+            color: var(--accent-green);
+        }
+
+        .contact-socials {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .contact-socials a {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            transition: all 0.25s ease;
+        }
+
+        .contact-socials a:hover {
+            color: #fff;
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .contact-form-wrap {
+            padding: 2.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contact-form-wrap h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin: 0 0 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .contact-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-lime));
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 860px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <a href="/index.html" class="navbar-logo">
+                <div class="logo-square">
+                    <img src="/assets/images/school-office-logo.png" alt="MJS Logo">
+                </div>
+                <span class="logo-text">MJS</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="nav-menu" id="nav-menu">
+                <li class="dropdown">
+                    <a href="#about">
+                        About <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/about-us/history.html">History</a>
+                        <a href="/about-us/leadership.html">Leadership</a>
+                        <a href="/about-us/smt.html">SMT</a>
+                        <a href="/about-us/educators.html">Educators</a>
+                        <a href="/about-us/framework.html">Framework</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#academics">
+                        Academics <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/academics/student-leadership.html">Student Leadership</a>
+                        <a href="/academics/prefect-board.html">Prefect Board</a>
+                        <a href="/academics/clubs-activities.html">Clubs & Activities</a>
+                        <a href="/academics/secondary-subjects.html">Subjects</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#resources">
+                        Resources <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/fehimaa/index.html">Fehimaa</a>
+                        <a href="/index.html">MJS 2.0</a>
+                        <a href="/contact.html">Contact</a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Action Buttons -->
+            <div class="nav-actions">
+                <a href="/fehimaa/index.html" class="btn-fehimaa">
+                    FEHIMAA <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <button class="btn-theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- CONTACT CONTENT -->
+    <main class="contact-main">
+        <div class="contact-hero">
+            <h1>Get in Touch</h1>
+            <p>Have a question, suggestion, or feedback for Mohamed Jamaluddin School? We'd love to hear from you. Reach us through any of the channels below.</p>
+        </div>
+
+        <div class="contact-grid">
+            <!-- Info -->
+            <div class="contact-info-cards">
+                <a class="contact-card" href="https://maps.google.com/?q=Mohamed+Jamaluddin+School+Fuvahmulah" target="_blank" rel="noopener">
+                    <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <h3>Visit Us</h3>
+                        <p>Mohamed Jamaluddin School<br>Gn. Fuvahmulah, Maldives</p>
+                    </div>
+                </a>
+
+                <a class="contact-card" href="mailto:admin@mjm.edu.mv">
+                    <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <h3>Email Us</h3>
+                        <p>admin@mjm.edu.mv</p>
+                    </div>
+                </a>
+
+                <a class="contact-card" href="tel:+9606860003">
+                    <div class="icon"><i class="fa-solid fa-phone"></i></div>
+                    <div>
+                        <h3>Call Us</h3>
+                        <p>+960 6860003</p>
+                    </div>
+                </a>
+
+                <div class="contact-card" style="cursor: default;">
+                    <div>
+                        <h3>Follow Us</h3>
+                        <div class="contact-socials">
+                            <a href="https://www.facebook.com/GN.MJS" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/MohamedJamaaludheenSchoolMJS/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/@hrmega" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="contact-form-wrap">
+                <h2>Send a Message</h2>
+                <form id="contact-form" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="What is this about?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="contact-submit">
+                        Send Message <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                    <p class="form-note">Submitting will open your email app with the message ready to send to our team.</p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <!-- Brand -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-square-footer">
+                            <img src="/assets/images/school-office-logo.png" alt="MJS Logo">
+                        </div>
+                        <span>MJS</span>
+                    </div>
+                    <p class="footer-address">
+                        Gn. Fuvahmulah, Maldives<br>
+                        Building Excellence Since 1979
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/GN.MJS" target="_blank" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/MohamedJamaaludheenSchoolMJS/" target="_blank" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@hrmega" target="_blank" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>EXPLORE</h4>
+                        <a href="/about-us/history.html">History</a>
+                        <a href="/about-us/leadership.html">Leadership</a>
+                        <a href="/about-us/smt.html">SMT</a>
+                        <a href="/about-us/educators.html">Educators</a>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>ACADEMICS</h4>
+                        <a href="/academics/student-leadership.html">Student Leadership</a>
+                        <a href="/academics/prefect-board.html">Prefect Board</a>
+                        <a href="/academics/clubs-activities.html">Clubs & Activities</a>
+                        <a href="/academics/secondary-subjects.html">Subjects</a>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>RESOURCES</h4>
+                        <a href="/fehimaa/index.html">Fehimaa Bulletin</a>
+                        <a href="/index.html">MJS 2.0 Platform</a>
+                        <a href="/contact.html">Contact Us</a>
+                        <a href="/about-us/framework.html">Framework</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="footer-bottom">
+                <p>© 2025 Mohamed Jamaluddin School</p>
+                <p class="footer-credit">Created with love by <a href="https://vilaresco.mv" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline;">Vilares Technologies Pvt. Ltd.</a></p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- JavaScript Files -->
+    <script src="/scripts/index.js"></script>
+    <script>
+        // Static site: compose the message into the user's email client.
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var name = document.getElementById('name').value.trim();
+            var email = document.getElementById('email').value.trim();
+            var subject = document.getElementById('subject').value.trim();
+            var message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all fields before sending.');
+                return;
+            }
+
+            var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
+            var mailto = 'mailto:mishalkhalidh7@gmail.com'
+                + '?subject=' + encodeURIComponent('[MJS Contact] ' + subject)
+                + '&body=' + encodeURIComponent(body);
+            window.location.href = mailto;
+        });
+    </script>
+
+</body>
+</html>
