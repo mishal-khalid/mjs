@@ -1,0 +1,194 @@
+/* ===================================
+   FRAMEWORK.CSS - Institution's Framework Page
+   Modern Theme Update
+   =================================== */
+
+/* Dhivehi Font */
+@font-face {
+    font-family: 'Faruma';
+    src: url('../fonts/Faruma.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Framework Box Base Styling */
+.framework-box {
+    position: relative;
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 3rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.framework-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-lime));
+    border-radius: 16px 16px 0 0;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.framework-box:hover::before {
+    transform: scaleX(1);
+}
+
+.framework-box:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-5px);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* Framework Heading */
+.framework-heading {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+.framework-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-lime));
+    border-radius: 2px;
+}
+
+/* ========== MOTTO SECTION ========== */
+.motto-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(132, 204, 22, 0.05));
+    text-align: center;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.motto-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.motto-text {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.4;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .motto-text {
+    background: rgba(30, 41, 59, 0.7);
+}
+
+.motto-text.english {
+    color: var(--accent-green);
+    font-style: italic;
+}
+
+.motto-text.dhivehi {
+    font-family: 'Faruma', sans-serif;
+    color: var(--accent-lime);
+    direction: rtl;
+}
+
+/* ========== VISION & MISSION GRID ========== */
+.vision-mission-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.bilingual-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.english-content p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1.0625rem;
+}
+
+.dhivehi-content p {
+    font-family: 'Faruma', sans-serif;
+    color: var(--text-secondary);
+    line-height: 2;
+    font-size: 1.125rem;
+    direction: rtl;
+    text-align: right;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+@media (max-width: 1024px) {
+    .framework-box {
+        padding: 2rem;
+    }
+
+    .vision-mission-grid {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .framework-box {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .framework-heading {
+        font-size: 2rem;
+    }
+
+    .motto-text {
+        font-size: 1.25rem;
+        padding: 1rem;
+    }
+
+    .vision-mission-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .framework-box {
+        padding: 1rem;
+    }
+
+    .framework-heading {
+        font-size: 1.75rem;
+    }
+
+    .motto-text {
+        font-size: 1.125rem;
+    }
+
+    .english-content p,
+    .dhivehi-content p {
+        font-size: 0.9375rem;
+    }
+}
+
+/* ========== DARK MODE SUPPORT ========== */
+[data-theme="dark"] .motto-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(132, 204, 22, 0.1));
+    border-color: rgba(16, 185, 129, 0.3);
+}

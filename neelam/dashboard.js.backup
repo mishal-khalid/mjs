@@ -1,0 +1,826 @@
+console.log('Multi-Admin Dashboard JS loaded successfully!');
+
+// ========== AUTHENTICATION ==========
+let currentUser = null;
+
+window.onAuthStateChanged(window.auth, (user) => {
+    if (user) {
+        console.log('User authenticated:', user.email);
+        currentUser = user;
+        const username = user.email.split('@')[0];
+        document.getElementById('userName').textContent = username;
+        document.getElementById('welcomeName').textContent = username;
+        
+        // Load dashboard data
+        loadDashboardStats();
+        loadManagePosts();
+        loadManageEvents();
+    } else {
+        console.log('No user authenticated, redirecting to login...');
+        window.location.href = 'login.html';
+    }
+});
+
+// ========== LOGOUT ==========
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    window.signOut(window.auth).then(() => {
+        console.log('Logged out successfully');
+        window.location.href = 'login.html';
+    }).catch((error) => {
+        console.error('Logout error:', error);
+        alert('Error logging out. Please try again.');
+    });
+});
+
+// ========== MOBILE MENU ==========
+document.getElementById('mobileMenuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('active');
+});
+
+// ========== MODAL HANDLING ==========
+
+// Open Post Modal
+const btnOpenPostModal = document.getElementById('btnOpenPostModal');
+const postModal = document.getElementById('postModal');
+const btnClosePostModal = document.getElementById('btnClosePostModal');
+const btnCancelPost = document.getElementById('btnCancelPost');
+
+btnOpenPostModal.addEventListener('click', () => {
+    console.log('Opening post modal...');
+    // Reset modal for creation (not editing)
+    document.getElementById('postForm').dataset.mode = 'create';
+    document.getElementById('postForm').dataset.postId = '';
+    document.querySelector('#postModal .modal-header h2').textContent = 'Create New Post';
+    document.querySelector('#postForm button[type="submit"]').innerHTML = '<i class="fas fa-paper-plane"></i> Publish Post';
+    
+    postModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+});
+
+btnClosePostModal.addEventListener('click', closePostModal);
+btnCancelPost.addEventListener('click', closePostModal);
+
+postModal.addEventListener('click', (e) => {
+    if (e.target === postModal) {
+        closePostModal();
+    }
+});
+
+function closePostModal() {
+    console.log('Closing post modal...');
+    postModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+    document.getElementById('postForm').reset();
+    document.getElementById('postImagePreview').innerHTML = '';
+    document.getElementById('clubGroup').style.display = 'none';
+}
+
+// Open Event Modal
+const btnOpenEventModal = document.getElementById('btnOpenEventModal');
+const eventModal = document.getElementById('eventModal');
+const btnCloseEventModal = document.getElementById('btnCloseEventModal');
+const btnCancelEvent = document.getElementById('btnCancelEvent');
+
+btnOpenEventModal.addEventListener('click', () => {
+    console.log('Opening event modal...');
+    // Reset modal for creation (not editing)
+    document.getElementById('eventForm').dataset.mode = 'create';
+    document.getElementById('eventForm').dataset.eventId = '';
+    document.querySelector('#eventModal .modal-header h2').textContent = 'Create New Event';
+    document.querySelector('#eventForm button[type="submit"]').innerHTML = '<i class="fas fa-calendar-check"></i> Create Event';
+    
+    eventModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+});
+
+btnCloseEventModal.addEventListener('click', closeEventModal);
+btnCancelEvent.addEventListener('click', closeEventModal);
+
+eventModal.addEventListener('click', (e) => {
+    if (e.target === eventModal) {
+        closeEventModal();
+    }
+});
+
+function closeEventModal() {
+    console.log('Closing event modal...');
+    eventModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+    document.getElementById('eventForm').reset();
+    document.getElementById('eventImagePreview').innerHTML = '';
+}
+
+// Close modals on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closePostModal();
+        closeEventModal();
+    }
+});
+
+// ========== FORM HANDLING ==========
+
+// Show/hide club dropdown
+document.getElementById('postCategory').addEventListener('change', function() {
+    const clubGroup = document.getElementById('clubGroup');
+    const postClub = document.getElementById('postClub');
+    
+    if (this.value === 'clubs') {
+        clubGroup.style.display = 'block';
+        postClub.required = true;
+    } else {
+        clubGroup.style.display = 'none';
+        postClub.required = false;
+        postClub.value = '';
+    }
+});
+
+// Image preview for post
+document.getElementById('postImage').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('postImagePreview').innerHTML = 
+                `<img src="${e.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Image preview for event
+document.getElementById('eventImage').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('eventImagePreview').innerHTML = 
+                `<img src="${e.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// ========== CREATE/UPDATE POST ==========
+document.getElementById('postForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const mode = this.dataset.mode || 'create';
+    const postId = this.dataset.postId;
+    
+    console.log(`${mode === 'create' ? 'Creating' : 'Updating'} post...`);
+    showLoading(true);
+    
+    try {
+        const title = document.getElementById('postTitle').value;
+        const category = document.getElementById('postCategory').value;
+        const club = document.getElementById('postClub').value;
+        const content = document.getElementById('postContent').value;
+        const publisher = document.getElementById('postPublisher').value;
+        const imageFile = document.getElementById('postImage').files[0];
+        
+        // Create post object with author information
+        const postData = {
+            title: title,
+            category: category,
+            content: content,
+            publisher: publisher,
+            authorEmail: currentUser.email,
+            authorId: currentUser.uid,
+            lastModified: window.serverTimestamp(),
+            lastModifiedBy: currentUser.email
+        };
+        
+        // Add club if category is clubs
+        if (category === 'clubs' && club) {
+            postData.club = club;
+        }
+        
+        // Handle image upload
+        if (imageFile) {
+            console.log('Uploading image...');
+            const storageReference = window.storageRef(window.storage, `images/posts/${Date.now()}_${imageFile.name}`);
+            await window.uploadBytes(storageReference, imageFile);
+            postData.imageUrl = await window.getDownloadURL(storageReference);
+            console.log('Image uploaded:', postData.imageUrl);
+        } else if (mode === 'update' && postId) {
+            // Keep existing image if not uploading new one
+            const existingDoc = await window.getDoc(window.doc(window.db, 'posts', postId));
+            if (existingDoc.exists() && existingDoc.data().imageUrl) {
+                postData.imageUrl = existingDoc.data().imageUrl;
+            }
+        }
+        
+        if (mode === 'create') {
+            // Add creation timestamp for new posts
+            postData.createdAt = window.serverTimestamp();
+            postData.createdBy = currentUser.email;
+            
+            console.log('Saving post to Firestore:', postData);
+            await window.addDoc(window.collection(window.db, 'posts'), postData);
+            showToast('Post published successfully! 🎉');
+        } else if (mode === 'update' && postId) {
+            // Update existing post
+            console.log('Updating post in Firestore:', postData);
+            await window.updateDoc(window.doc(window.db, 'posts', postId), postData);
+            showToast('Post updated successfully! ✅');
+        }
+        
+        console.log('Operation completed successfully!');
+        showLoading(false);
+        closePostModal();
+        
+        // Reload data
+        loadDashboardStats();
+        loadManagePosts();
+        
+    } catch (error) {
+        showLoading(false);
+        console.error('Error with post operation:', error);
+        alert('Error: ' + error.message);
+    }
+});
+
+// ========== CREATE/UPDATE EVENT ==========
+document.getElementById('eventForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const mode = this.dataset.mode || 'create';
+    const eventId = this.dataset.eventId;
+    
+    console.log(`${mode === 'create' ? 'Creating' : 'Updating'} event...`);
+    showLoading(true);
+    
+    try {
+        const title = document.getElementById('eventTitle').value;
+        const description = document.getElementById('eventDescription').value;
+        const eventDate = document.getElementById('eventDate').value;
+        const eventTime = document.getElementById('eventTime').value;
+        const publisher = document.getElementById('eventPublisher').value;
+        const imageFile = document.getElementById('eventImage').files[0];
+        
+        // Combine date and time
+        const eventDateTime = new Date(`${eventDate}T${eventTime}`);
+        console.log('Event date/time:', eventDateTime);
+        
+        // Create event object with author information
+        const eventData = {
+            title: title,
+            description: description,
+            eventDate: eventDateTime,
+            publisher: publisher,
+            authorEmail: currentUser.email,
+            authorId: currentUser.uid,
+            lastModified: window.serverTimestamp(),
+            lastModifiedBy: currentUser.email
+        };
+        
+        // Handle image upload
+        if (imageFile) {
+            console.log('Uploading image...');
+            const storageReference = window.storageRef(window.storage, `images/events/${Date.now()}_${imageFile.name}`);
+            await window.uploadBytes(storageReference, imageFile);
+            eventData.imageUrl = await window.getDownloadURL(storageReference);
+            console.log('Image uploaded:', eventData.imageUrl);
+        } else if (mode === 'update' && eventId) {
+            // Keep existing image if not uploading new one
+            const existingDoc = await window.getDoc(window.doc(window.db, 'events', eventId));
+            if (existingDoc.exists() && existingDoc.data().imageUrl) {
+                eventData.imageUrl = existingDoc.data().imageUrl;
+            }
+        }
+        
+        if (mode === 'create') {
+            // Add creation timestamp for new events
+            eventData.createdAt = window.serverTimestamp();
+            eventData.createdBy = currentUser.email;
+            
+            console.log('Saving event to Firestore:', eventData);
+            await window.addDoc(window.collection(window.db, 'events'), eventData);
+            showToast('Event created successfully! 📅');
+        } else if (mode === 'update' && eventId) {
+            // Update existing event
+            console.log('Updating event in Firestore:', eventData);
+            await window.updateDoc(window.doc(window.db, 'events', eventId), eventData);
+            showToast('Event updated successfully! ✅');
+        }
+        
+        console.log('Operation completed successfully!');
+        showLoading(false);
+        closeEventModal();
+        
+        // Reload data
+        loadDashboardStats();
+        loadManageEvents();
+        
+    } catch (error) {
+        showLoading(false);
+        console.error('Error with event operation:', error);
+        alert('Error: ' + error.message);
+    }
+});
+
+// ========== LOAD DASHBOARD STATS ==========
+async function loadDashboardStats() {
+    console.log('Loading dashboard stats...');
+    
+    try {
+        // Get total posts
+        const postsSnapshot = await window.getDocs(window.collection(window.db, 'posts'));
+        document.getElementById('totalPosts').textContent = postsSnapshot.size;
+        
+        // Get total events
+        const eventsSnapshot = await window.getDocs(window.collection(window.db, 'events'));
+        document.getElementById('totalEvents').textContent = eventsSnapshot.size;
+        
+        // Get upcoming events
+        const now = new Date();
+        const upcomingEventsQuery = window.query(
+            window.collection(window.db, 'events'),
+            window.where('eventDate', '>=', now)
+        );
+        const upcomingSnapshot = await window.getDocs(upcomingEventsQuery);
+        document.getElementById('upcomingEvents').textContent = upcomingSnapshot.size;
+        
+        // Get achievements posts
+        const achievementsQuery = window.query(
+            window.collection(window.db, 'posts'),
+            window.where('category', '==', 'achievements')
+        );
+        const achievementsSnapshot = await window.getDocs(achievementsQuery);
+        document.getElementById('achievementsPosts').textContent = achievementsSnapshot.size;
+        
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
+}
+
+// ========== LOAD MANAGE POSTS ==========
+async function loadManagePosts() {
+    console.log('Loading manage posts...');
+    
+    const container = document.getElementById('postsContainer');
+    container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Loading posts...</p>';
+    
+    try {
+        const postsQuery = window.query(
+            window.collection(window.db, 'posts'),
+            window.orderBy('createdAt', 'desc')
+        );
+        
+        const querySnapshot = await window.getDocs(postsQuery);
+        console.log('Posts loaded:', querySnapshot.size);
+        
+        container.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>No posts yet</h3>
+                    <p>Create your first post to get started!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        querySnapshot.forEach((doc) => {
+            const post = doc.data();
+            const postCard = createPostCard(doc.id, post);
+            container.appendChild(postCard);
+        });
+        
+    } catch (error) {
+        console.error('Error loading posts:', error);
+        container.innerHTML = '<p style="text-align: center; color: #c33; padding: 2rem;">Error loading posts.</p>';
+    }
+}
+
+// Create Post Card with Edit functionality
+function createPostCard(id, post) {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    
+    const categoryColors = {
+        'announcements': '#667eea',
+        'achievements': '#ec4899',
+        'clubs': '#6ba654'
+    };
+    
+    const categoryColor = categoryColors[post.category] || '#667eea';
+    const timeString = post.createdAt ? formatDate(post.createdAt.toDate()) : 'Just now';
+    
+    // Check if current user is the author
+    const isAuthor = currentUser && post.authorId === currentUser.uid;
+    const authorBadge = isAuthor ? '<span class="author-badge">Your Post</span>' : '';
+    
+    card.innerHTML = `
+        <div class="item-info">
+            <h3 class="item-title">${post.title}</h3>
+            <div class="item-meta">
+                <span class="item-category" style="background: ${categoryColor};">
+                    ${post.category.charAt(0).toUpperCase() + post.category.slice(1)}
+                </span>
+                ${post.club ? `<span>📌 ${getClubName(post.club)}</span>` : ''}
+                ${authorBadge}
+                <span>👤 ${post.publisher}</span>
+                <span>✉️ ${post.createdBy || post.authorEmail || 'Unknown'}</span>
+                <span>📅 ${timeString}</span>
+                ${post.lastModifiedBy && post.lastModifiedBy !== post.createdBy ? 
+                    `<span>✏️ Edited by ${post.lastModifiedBy}</span>` : ''}
+            </div>
+        </div>
+        <div class="item-actions">
+            <button class="btn-edit" onclick="editPost('${id}')">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn-delete" onclick="deletePost('${id}')">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+    `;
+    
+    return card;
+}
+
+// Edit Post - Load data into modal
+window.editPost = async function(postId) {
+    console.log('Editing post:', postId);
+    showLoading(true);
+    
+    try {
+        const docSnap = await window.getDoc(window.doc(window.db, 'posts', postId));
+        
+        if (!docSnap.exists()) {
+            throw new Error('Post not found');
+        }
+        
+        const post = docSnap.data();
+        
+        // Populate form
+        document.getElementById('postTitle').value = post.title;
+        document.getElementById('postCategory').value = post.category;
+        document.getElementById('postContent').value = post.content;
+        document.getElementById('postPublisher').value = post.publisher;
+        
+        // Handle club if exists
+        if (post.category === 'clubs' && post.club) {
+            document.getElementById('clubGroup').style.display = 'block';
+            document.getElementById('postClub').value = post.club;
+        }
+        
+        // Show existing image if exists
+        if (post.imageUrl) {
+            document.getElementById('postImagePreview').innerHTML = 
+                `<img src="${post.imageUrl}" alt="Current Image">`;
+        }
+        
+        // Set modal to edit mode
+        document.getElementById('postForm').dataset.mode = 'update';
+        document.getElementById('postForm').dataset.postId = postId;
+        document.querySelector('#postModal .modal-header h2').textContent = 'Edit Post';
+        document.querySelector('#postForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update Post';
+        
+        // Open modal
+        postModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        showLoading(false);
+        
+    } catch (error) {
+        showLoading(false);
+        console.error('Error loading post:', error);
+        alert('Error loading post: ' + error.message);
+    }
+};
+
+// Get Club Name
+function getClubName(clubId) {
+    const clubNames = {
+        'manaaru': 'Manaaru',
+        'stellar': 'Stellar',
+        'fahimagu': 'Fahimagu',
+        'hasthee': 'Hasthee',
+        'business': 'Business Club',
+        'arts-media': 'Arts & Media',
+        'culture': 'Culture & Human Rights',
+        'sports': 'Sports Club',
+        'traffic': 'Traffic Monitors'
+    };
+    return clubNames[clubId] || clubId;
+}
+
+// Delete Post
+window.deletePost = async function(postId) {
+    if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) return;
+    
+    console.log('Deleting post:', postId);
+    showLoading(true);
+    
+    try {
+        await window.deleteDoc(window.doc(window.db, 'posts', postId));
+        console.log('Post deleted successfully');
+        showLoading(false);
+        showToast('Post deleted successfully! ✅');
+        loadManagePosts();
+        loadDashboardStats();
+    } catch (error) {
+        showLoading(false);
+        console.error('Error deleting post:', error);
+        alert('Error deleting post: ' + error.message);
+    }
+};
+
+// ========== LOAD MANAGE EVENTS ==========
+async function loadManageEvents() {
+    console.log('Loading manage events...');
+    
+    const container = document.getElementById('eventsContainer');
+    container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Loading events...</p>';
+    
+    try {
+        const eventsQuery = window.query(
+            window.collection(window.db, 'events'),
+            window.orderBy('eventDate', 'desc')
+        );
+        
+        const querySnapshot = await window.getDocs(eventsQuery);
+        console.log('Events loaded:', querySnapshot.size);
+        
+        container.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>No events yet</h3>
+                    <p>Create your first event to get started!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        querySnapshot.forEach((doc) => {
+            const event = doc.data();
+            const eventCard = createEventCard(doc.id, event);
+            container.appendChild(eventCard);
+        });
+        
+    } catch (error) {
+        console.error('Error loading events:', error);
+        container.innerHTML = '<p style="text-align: center; color: #c33; padding: 2rem;">Error loading events.</p>';
+    }
+}
+
+// Create Event Card with Edit functionality
+function createEventCard(id, event) {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    
+    const eventDate = event.eventDate.toDate ? event.eventDate.toDate() : new Date(event.eventDate);
+    const dateString = formatDate(eventDate);
+    const timeString = eventDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    
+    const isPast = eventDate < new Date();
+    const statusColor = isPast ? '#ef4444' : '#10b981';
+    const statusText = isPast ? 'Past' : 'Upcoming';
+    
+    // Check if current user is the author
+    const isAuthor = currentUser && event.authorId === currentUser.uid;
+    const authorBadge = isAuthor ? '<span class="author-badge">Your Event</span>' : '';
+    
+    card.innerHTML = `
+        <div class="item-info">
+            <h3 class="item-title">${event.title}</h3>
+            <div class="item-meta">
+                <span class="item-category" style="background: ${statusColor};">
+                    ${statusText}
+                </span>
+                ${authorBadge}
+                <span>📅 ${dateString} at ${timeString}</span>
+                <span>👤 ${event.publisher}</span>
+                <span>✉️ ${event.createdBy || event.authorEmail || 'Unknown'}</span>
+                ${event.lastModifiedBy && event.lastModifiedBy !== event.createdBy ? 
+                    `<span>✏️ Edited by ${event.lastModifiedBy}</span>` : ''}
+            </div>
+        </div>
+        <div class="item-actions">
+            <button class="btn-edit" onclick="editEvent('${id}')">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn-delete" onclick="deleteEvent('${id}')">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+    `;
+    
+    return card;
+}
+
+// Edit Event - Load data into modal
+window.editEvent = async function(eventId) {
+    console.log('Editing event:', eventId);
+    showLoading(true);
+    
+    try {
+        const docSnap = await window.getDoc(window.doc(window.db, 'events', eventId));
+        
+        if (!docSnap.exists()) {
+            throw new Error('Event not found');
+        }
+        
+        const event = docSnap.data();
+        const eventDate = event.eventDate.toDate ? event.eventDate.toDate() : new Date(event.eventDate);
+        
+        // Populate form
+        document.getElementById('eventTitle').value = event.title;
+        document.getElementById('eventDescription').value = event.description;
+        document.getElementById('eventDate').value = eventDate.toISOString().split('T')[0];
+        document.getElementById('eventTime').value = eventDate.toTimeString().slice(0, 5);
+        document.getElementById('eventPublisher').value = event.publisher;
+        
+        // Show existing image if exists
+        if (event.imageUrl) {
+            document.getElementById('eventImagePreview').innerHTML = 
+                `<img src="${event.imageUrl}" alt="Current Image">`;
+        }
+        
+        // Set modal to edit mode
+        document.getElementById('eventForm').dataset.mode = 'update';
+        document.getElementById('eventForm').dataset.eventId = eventId;
+        document.querySelector('#eventModal .modal-header h2').textContent = 'Edit Event';
+        document.querySelector('#eventForm button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update Event';
+        
+        // Open modal
+        eventModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        showLoading(false);
+        
+    } catch (error) {
+        showLoading(false);
+        console.error('Error loading event:', error);
+        alert('Error loading event: ' + error.message);
+    }
+};
+
+// Delete Event
+window.deleteEvent = async function(eventId) {
+    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) return;
+    
+    console.log('Deleting event:', eventId);
+    showLoading(true);
+    
+    try {
+        await window.deleteDoc(window.doc(window.db, 'events', eventId));
+        console.log('Event deleted successfully');
+        showLoading(false);
+        showToast('Event deleted successfully! ✅');
+        loadManageEvents();
+        loadDashboardStats();
+    } catch (error) {
+        showLoading(false);
+        console.error('Error deleting event:', error);
+        alert('Error deleting event: ' + error.message);
+    }
+};
+
+// ========== FILTERS ==========
+
+// Filter Posts
+document.getElementById('filterCategory').addEventListener('change', async function() {
+    const category = this.value;
+    console.log('Filtering posts by category:', category);
+    
+    const container = document.getElementById('postsContainer');
+    container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Loading posts...</p>';
+    
+    try {
+        let postsQuery;
+        
+        if (category === 'all') {
+            postsQuery = window.query(
+                window.collection(window.db, 'posts'),
+                window.orderBy('createdAt', 'desc')
+            );
+        } else {
+            postsQuery = window.query(
+                window.collection(window.db, 'posts'),
+                window.where('category', '==', category),
+                window.orderBy('createdAt', 'desc')
+            );
+        }
+        
+        const querySnapshot = await window.getDocs(postsQuery);
+        container.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>No posts found</h3>
+                    <p>No posts in this category yet.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        querySnapshot.forEach((doc) => {
+            const post = doc.data();
+            const postCard = createPostCard(doc.id, post);
+            container.appendChild(postCard);
+        });
+        
+    } catch (error) {
+        console.error('Error filtering posts:', error);
+        container.innerHTML = '<p style="text-align: center; color: #c33; padding: 2rem;">Error loading posts.</p>';
+    }
+});
+
+// Filter Events
+document.getElementById('filterEventStatus').addEventListener('change', async function() {
+    const status = this.value;
+    console.log('Filtering events by status:', status);
+    
+    const container = document.getElementById('eventsContainer');
+    container.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Loading events...</p>';
+    
+    try {
+        const now = new Date();
+        let eventsQuery;
+        
+        if (status === 'all') {
+            eventsQuery = window.query(
+                window.collection(window.db, 'events'),
+                window.orderBy('eventDate', 'desc')
+            );
+        } else if (status === 'upcoming') {
+            eventsQuery = window.query(
+                window.collection(window.db, 'events'),
+                window.where('eventDate', '>=', now),
+                window.orderBy('eventDate', 'asc')
+            );
+        } else if (status === 'past') {
+            eventsQuery = window.query(
+                window.collection(window.db, 'events'),
+                window.where('eventDate', '<', now),
+                window.orderBy('eventDate', 'desc')
+            );
+        }
+        
+        const querySnapshot = await window.getDocs(eventsQuery);
+        container.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>No events found</h3>
+                    <p>No ${status} events.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        querySnapshot.forEach((doc) => {
+            const event = doc.data();
+            const eventCard = createEventCard(doc.id, event);
+            container.appendChild(eventCard);
+        });
+        
+    } catch (error) {
+        console.error('Error filtering events:', error);
+        container.innerHTML = '<p style="text-align: center; color: #c33; padding: 2rem;">Error loading events.</p>';
+    }
+});
+
+// ========== UTILITY FUNCTIONS ==========
+
+function formatDate(date) {
+    return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+    });
+}
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMessage').textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+function showLoading(show) {
+    const overlay = document.getElementById('loading');
+    if (show) {
+        overlay.classList.add('show');
+    } else {
+        overlay.classList.remove('show');
+    }
+}
+
+console.log('Multi-Admin Dashboard JS initialization complete!');

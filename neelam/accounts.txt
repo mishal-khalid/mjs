@@ -1,0 +1,22 @@
+===== Mish'al (OWNERSHIP) =====
+email: mishalkhalidh7@gmail.com 
+pass: 7%e`d{8ZBH5H
+
+===== Admin MJS =====
+email: admin@mjm.edu.mv
+pass: 9+`av5x|^2M2
+
+
+
+===== API Easy Access =====
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhYfsYEJGaBvSRsY1bbujHCyKLGXH1W28",
+    authDomain: "mjs-fehimaa.firebaseapp.com",
+    projectId: "mjs-fehimaa",
+    storageBucket: "mjs-fehimaa.firebasestorage.app",
+    messagingSenderId: "509657178337",
+    appId: "1:509657178337:web:e0e6aa686b5ee4697157a0",
+    measurementId: "G-BXD5Q1MY6V"
+  };
+
+=====  =====

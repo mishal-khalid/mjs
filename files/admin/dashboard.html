@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | MJS Bulletin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-newspaper"></i>
+            <h2>MJS Bulletin</h2>
+            <p>Admin Dashboard</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-link" data-page="posts">
+                <i class="fas fa-file-alt"></i>
+                <span>Posts</span>
+            </a>
+            <a href="#" class="nav-link" data-page="audit">
+                <i class="fas fa-history"></i>
+                <span>Audit Log</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <p id="userEmail">admin@mjs.edu.mv</p>
+                    <small>Administrator</small>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div class="page active" id="dashboardPage">
+            <div class="page-header">
+                <h1>Dashboard Overview</h1>
+                <button class="btn-primary" onclick="showCreateModal()">
+                    <i class="fas fa-plus"></i>
+                    Create Post
+                </button>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <i class="fas fa-file-alt"></i>
+                    <div>
+                        <h3 id="statTotal">0</h3>
+                        <p>Total Posts</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-calendar-day"></i>
+                    <div>
+                        <h3 id="statToday">0</h3>
+                        <p>Today</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-calendar-week"></i>
+                    <div>
+                        <h3 id="statWeek">0</h3>
+                        <p>This Week</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        <h3 id="statMonth">0</h3>
+                        <p>This Month</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-posts">
+                <h2>Recent Posts</h2>
+                <div id="recentPostsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Posts Page -->
+        <div class="page" id="postsPage">
+            <div class="page-header">
+                <h1>Manage Posts</h1>
+                <button class="btn-primary" onclick="showCreateModal()">
+                    <i class="fas fa-plus"></i>
+                    Create Post
+                </button>
+            </div>
+
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="postsSearch" placeholder="Search posts...">
+                </div>
+                <select id="postsFilter" class="filter-select">
+                    <option value="all">All Categories</option>
+                    <option value="announcement">Announcements</option>
+                    <option value="event">Events</option>
+                    <option value="news">News</option>
+                    <option value="achievement">Achievements</option>
+                </select>
+            </div>
+
+            <div class="posts-table-container">
+                <table class="posts-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Author</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postsTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Audit Log Page -->
+        <div class="page" id="auditPage">
+            <div class="page-header">
+                <h1>Audit Log</h1>
+                <button class="btn-secondary" onclick="exportAuditLog()">
+                    <i class="fas fa-download"></i>
+                    Export
+                </button>
+            </div>
+
+            <div class="audit-log-container">
+                <div id="auditLogContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create/Edit Post Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Post</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm">
+                    <input type="hidden" id="postId">
+                    
+                    <div class="form-group">
+                        <label for="postTitle">Title *</label>
+                        <input type="text" id="postTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postCategory">Category *</label>
+                        <select id="postCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="announcement">Announcement</option>
+                            <option value="event">Event</option>
+                            <option value="news">News</option>
+                            <option value="achievement">Achievement</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postContent">Content *</label>
+                        <textarea id="postContent" rows="6" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postImage">Image (Optional)</label>
+                        <input type="file" id="postImage" accept="image/*">
+                        <div id="imagePreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            <span id="submitBtnText">Create Post</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            getDoc,
+            updateDoc, 
+            deleteDoc, 
+            doc, 
+            query, 
+            orderBy, 
+            where,
+            serverTimestamp,
+            Timestamp
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { 
+            getStorage, 
+            ref, 
+            uploadBytes, 
+            getDownloadURL,
+            deleteObject 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhYfsYEJGaBvSRsY1bbujHCyKLGXH1W28",
+            authDomain: "mjs-fehimaa.firebaseapp.com",
+            projectId: "mjs-fehimaa",
+            storageBucket: "mjs-fehimaa.firebasestorage.app",
+            messagingSenderId: "509657178337",
+            appId: "1:509657178337:web:e0e6aa686b5ee4697157a0",
+            measurementId: "G-BXD5Q1MY6V"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.signOut = signOut;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.getDocs = getDocs;
+        window.getDoc = getDoc;
+        window.updateDoc = updateDoc;
+        window.deleteDoc = deleteDoc;
+        window.doc = doc;
+        window.query = query;
+        window.orderBy = orderBy;
+        window.where = where;
+        window.serverTimestamp = serverTimestamp;
+        window.Timestamp = Timestamp;
+        window.storageRef = ref;
+        window.uploadBytes = uploadBytes;
+        window.getDownloadURL = getDownloadURL;
+        window.deleteObject = deleteObject;
+
+        // Load dashboard script
+        const script = document.createElement('script');
+        script.src = 'dashboard.js';
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>

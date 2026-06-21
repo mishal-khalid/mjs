@@ -1,0 +1,795 @@
+/* ===================================
+   GLOBAL.CSS - Shared Styles for All Pages
+   Includes: Fonts, Colors, Header, Navbar, Footer, Reusable Components
+   =================================== */
+
+/* ========== CSS VARIABLES - COLOR PALETTE ========== */
+:root {
+    /* Primary Greens */
+    --dark-green: #0d5941;
+    --fir-green: #0d5941;
+    --green: #2d8659;
+    --frosted-green: #6fb88e;
+    --mint: #A7F3D0;
+    
+    /* Complementary Colors */
+    --white: #FFFFFF;
+    --cream: #FEF3C7;
+    --purple: #C4B5FD;
+    --yellow: #FDE047;
+    --coral: #FCA5A5;
+    
+    /* Text Colors */
+    --text-dark: #1a1a1a;
+    --text-light: #f5f5f5;
+    --text-gray: #6b7280;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--dark-green) 0%, var(--green) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--yellow) 0%, var(--coral) 100%);
+    --gradient-background: linear-gradient(135deg, var(--cream) 0%, var(--mint) 50%, var(--purple) 100%);
+    
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 40px;
+    --spacing-xl: 64px;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* ========== FONT FACES ========== */
+@font-face {
+    font-family: 'Cerotta';
+    src: url('../fonts/Cerotta.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'RS of Melodrame';
+    src: url('../fonts/RS\ of\ Melodrame.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal; 
+}
+
+@font-face {
+    font-family: 'TT Hoves Pro';
+    src: url('../fonts/TT\ Hoves\ Pro\ Trial\ Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TT Hoves Pro';
+    src: url('../fonts/TT\ Hoves\ Pro\ Trial\ Expanded\ DemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* ========== RESET & BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'TT Hoves Pro', sans-serif;
+    font-weight: 400;
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background: var(--gradient-background);
+    min-height: 100vh;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1, h2 {
+    font-family: 'Cerotta', sans-serif;
+    font-weight: normal;
+    line-height: 1.2;
+}
+
+h3, h4, h5, h6 {
+    font-family: 'TT Hoves Pro', sans-serif;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-normal);
+}
+
+button {
+    font-family: 'TT Hoves Pro', sans-serif;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ========== HEADER - Sticky at Top ========== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--dark-green);
+    padding: 10px var(--spacing-lg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Countdown - Center */
+.countdown-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--white);
+}
+
+.countdown-header h3 {
+    font-size: 0.875rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    white-space: nowrap;
+}
+
+.countdown-timer {
+    display: flex;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.countdown-timer span {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(10px);
+    min-width: 45px;
+    text-align: center;
+}
+
+/* Social Media Links - Absolute Right */
+.social-links {
+    position: absolute;
+    right: var(--spacing-lg);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.social-links a {
+    color: var(--white);
+    font-size: 1.25rem;
+    transition: var(--transition-normal);
+}
+
+.social-links a:hover {
+    color: var(--yellow);
+    transform: translateY(-3px);
+}
+
+.contact-arrow {
+    margin-left: 10px;
+    padding-left: 15px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 1.25rem;
+}
+
+.contact-arrow:hover {
+    color: var(--coral);
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+    position: fixed;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 1000px; /* Changed from 900px to 1000px */
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 24px rgba(13, 89, 65, 0.15), 
+                0 0 40px rgba(167, 243, 208, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 16px;
+}
+
+/* Navbar Scrolled State - More Compact */
+.navbar.scrolled {
+    padding: 8px 20px;
+    max-width: 900px; /* Changed from 800px to 900px */
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(13, 89, 65, 0.2), 
+                0 0 60px rgba(167, 243, 208, 0.4);
+}
+
+/* Navbar Brand - LEFT */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 0 auto;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled .navbar-brand {
+    gap: 0;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled .logo {
+    width: 40px;
+    height: 40px;
+}
+
+.school-name {
+    font-family: 'Cerotta', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--dark-green);
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    max-width: 200px;
+}
+
+.school-name-line1 {
+    font-size: 0.99rem;
+    letter-spacing: 3.9px;
+}
+
+.school-name-line2 {
+    font-size: 0.99rem;
+    letter-spacing: 1px;
+}
+
+.school-name-line3 {
+    font-size: 1.35rem;
+    letter-spacing: 3.3px;
+}
+
+/* Hide school name when scrolled */
+.navbar.scrolled .school-name {
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* Navigation Links - CENTER */
+.nav-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled .nav-links {
+    gap: 6px;
+    flex: 0 1 auto;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: var(--text-dark);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    font-size: 0.95rem;
+}
+
+.navbar.scrolled .nav-link {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+.nav-link:hover {
+    background: var(--mint);
+    color: var(--dark-green);
+}
+
+.nav-link i {
+    font-size: 0.75rem;
+    transition: var(--transition-fast);
+}
+
+/* Active State for Nav Items */
+.nav-item.active > .nav-link {
+    border: 2px solid var(--dark-green);
+    background: transparent;
+}
+
+.nav-item.active > .nav-link:hover {
+    background: var(--mint);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    font-family: 'TT Hoves Pro', sans-serif;
+    font-weight: 400;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    min-width: 220px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown:hover .nav-link i {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu li {
+    margin: 0;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--text-dark);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+    font-family: 'TT Hoves Pro', sans-serif;
+    font-weight: 400;
+}
+
+.dropdown-menu a:hover {
+    background: var(--mint);
+    color: var(--dark-green);
+    transform: translateX(5px);
+}
+
+/* Active State for Dropdown Items */
+.dropdown-menu a.active {
+    color: var(--dark-green);
+    text-decoration: underline wavy;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.dropdown-menu a.active:hover {
+    background: var(--mint);
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+    display: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: var(--dark-green);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    background: var(--dark-green);
+    color: var(--white);
+    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 300px;
+    gap: var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-columns {
+    display: contents;
+}
+
+.footer-column h4 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--yellow);
+}
+
+.footer-column ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-column a {
+    color: var(--text-light);
+    opacity: 0.8;
+    transition: var(--transition-fast);
+}
+
+.footer-column a:hover {
+    opacity: 1;
+    color: var(--mint);
+    transform: translateX(5px);
+}
+
+/* Footer School Info - Far Right */
+.footer-school-info {
+    text-align: center;
+}
+
+.footer-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-sm);
+}
+
+.footer-school-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-school-info p {
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.footer-school-info i {
+    margin-right: 8px;
+    color: var(--mint);
+}
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: var(--spacing-sm);
+}
+
+.footer-social a {
+    color: var(--white);
+    font-size: 1.25rem;
+    transition: var(--transition-normal);
+}
+
+.footer-social a:hover {
+    color: var(--yellow);
+    transform: translateY(-3px);
+}
+
+/* Footer Bottom - Copyright */
+.footer-bottom {
+    text-align: center;
+    padding-top: var(--spacing-md);
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+/* ========== REUSABLE COMPONENTS ========== */
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--dark-green);
+}
+
+/* Card Styles */
+.card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Button Styles */
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: var(--transition-normal);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--dark-green);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--green);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--mint);
+    color: var(--dark-green);
+}
+
+.btn-secondary:hover {
+    background: var(--frosted-green);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    :root {
+        --spacing-lg: 32px;
+        --spacing-xl: 48px;
+    }
+    
+    .navbar {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .nav-links {
+        gap: 12px;
+    }
+    
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.875rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .footer-school-info {
+        grid-column: 1 / -1;
+        margin-top: var(--spacing-md);
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .header {
+        padding: 8px var(--spacing-md);
+    }
+    
+    .countdown-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .countdown-header h3 {
+        font-size: 0.7rem;
+    }
+    
+    .countdown-timer {
+        font-size: 0.875rem;
+        gap: 6px;
+    }
+    
+    .countdown-timer span {
+        padding: 3px 8px;
+        min-width: 35px;
+        font-size: 0.75rem;
+    }
+    
+    .social-links {
+        position: static;
+        margin-top: 8px;
+        gap: 10px;
+    }
+    
+    .social-links a {
+        font-size: 1rem;
+    }
+    
+    /* Mobile Navbar */
+    .navbar {
+        top: 88px;
+        padding: var(--spacing-sm);
+        width: calc(100% - 32px); /* Add specific width */
+        max-width: none; /* Remove max-width constraint */
+        left: 16px; /* Position from left */
+        transform: none; /* Remove center transform */
+    }
+    
+    .navbar.scrolled {
+        top: 15px;
+        width: calc(100% - 20px);
+        left: 10px;
+        transform: none;
+        padding: var(--spacing-sm);
+    }
+    
+    .school-name {
+        display: none;
+    }
+    
+    .navbar.scrolled .school-name {
+        display: none;
+    }
+    
+    /* CRITICAL: Hide nav-links by default on mobile */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%; /* Hidden off-screen by default */
+        width: 80%;
+        height: 100vh;
+        background: var(--white);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--spacing-xl) var(--spacing-md);
+        gap: var(--spacing-sm);
+        transition: left 0.5s ease; /* Smooth slide transition */
+        box-shadow: var(--shadow-lg);
+        justify-content: flex-start;
+        z-index: 9999; /* Ensure it's above everything */
+        overflow-y: auto; /* Allow scrolling if menu is long */
+    }
+    
+    /* Show nav-links when active */
+    .nav-links.active {
+        left: 0; /* Slide in from left */
+    }
+    
+    /* Show mobile toggle */
+    .mobile-toggle {
+        display: block;
+        z-index: 10000; /* Above the menu */
+    }
+    
+    .dropdown-menu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        background: var(--mint);
+        margin-top: 8px;
+        display: none;
+    }
+    
+    .dropdown.active .dropdown-menu {
+        display: block;
+    }
+    
+    /* Footer Mobile */
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-column {
+        padding-bottom: var(--spacing-md);
+    }
+    
+    .footer-column a:hover {
+        transform: none;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .header {
+        padding: 6px var(--spacing-sm);
+    }
+    
+    .navbar {
+        padding: 10px var(--spacing-sm);
+    }
+    
+    .logo {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+    display: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: var(--dark-green);
+}
+
+/* Show mobile toggle only on mobile/tablet screens */
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: block;
+    }
+}

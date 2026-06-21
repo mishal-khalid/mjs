@@ -1,0 +1,55 @@
+/* ===================================
+   SUBJECTS-LEADERSHIP.CSS
+   Additional styles for subjects page using Leadership theme
+   =================================== */
+
+.subject-category-section {
+    margin-bottom: 4rem;
+}
+
+.subject-category-section:last-child {
+    margin-bottom: 0;
+}
+
+.subject-category-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid rgba(16, 185, 129, 0.2);
+}
+
+.subject-category-title i {
+    font-size: 2rem;
+    color: var(--accent-lime);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .subject-category-section {
+        margin-bottom: 3rem;
+    }
+
+    .subject-category-title {
+        font-size: 1.5rem;
+        gap: 0.75rem;
+    }
+
+    .subject-category-title i {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .subject-category-title {
+        font-size: 1.25rem;
+    }
+
+    .subject-category-title i {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,10 @@
+/* Simple additional styles for clubs page using Leadership theme */
+/* All main styles come from leadership.css */
+
+.content-block {
+    margin-bottom: 4rem;
+}
+
+.content-block:last-child {
+    margin-bottom: 0;
+}

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Fehimaa - MJS</title>
+    <link rel="shortcut icon" href="/assets/images/fehimaa-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/assets/images/fehimaa-logo.png" alt="MJS Logo" class="sidebar-logo">
+            <div>
+                <h2>Fehimaa</h2>
+                <p>Dashboard</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+            <a href="dashboard/posts.html" class="nav-item">
+                <i class="fas fa-newspaper"></i>
+                <span>Manage Posts</span>
+            </a>
+            <a href="dashboard/events.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Manage Events</span>
+            </a>
+            <a href="dashboard/audit-log.html" class="nav-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Audit Log</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <p class="user-name" id="userName">Loading...</p>
+                    <p class="user-role">Administrator</p>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Dashboard Overview</h1>
+            </div>
+            <div class="top-bar-right">
+                <a href="index.html" class="view-site-btn">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Site
+                </a>
+            </div>
+        </header>
+
+        <!-- Content Container -->
+        <div class="content-container">
+            
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2>Welcome back, <span id="welcomeName">Admin</span>! 👋</h2>
+                <p>Here's what's happening with your bulletin today.</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #5B58EB, #BB63FF);">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalAnnouncements">0</h3>
+                        <p>Announcements</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #56E1E9, #5B58EB);">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalAchievements">0</h3>
+                        <p>Achievements</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #E23C64, #FF5E5E);">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalEvents">0</h3>
+                        <p>Total Events</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #FFD464, #FF5E5E);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="upcomingEvents">0</h3>
+                        <p>Upcoming Events</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" id="btnQuickAnnouncement">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>New Announcement</span>
+                    </button>
+                    <button class="action-btn" id="btnQuickAchievement">
+                        <i class="fas fa-trophy"></i>
+                        <span>New Achievement</span>
+                    </button>
+                    <button class="action-btn" id="btnQuickEvent">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>New Event</span>
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='dashboard/audit-log.html'">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>View Audit Log</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Announcements -->
+            <div class="recent-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-newspaper"></i> Recent Announcements</h3>
+                    <a href="dashboard/posts.html" class="filter-select" style="text-decoration: none; cursor: pointer;">View All →</a>
+                </div>
+                <div id="announcementsContainer" class="items-container">
+                    <div class="loading-message">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading announcements...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Events -->
+            <div class="recent-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-calendar-alt"></i> Upcoming Events</h3>
+                    <a href="dashboard/events.html" class="filter-select" style="text-decoration: none; cursor: pointer;">View All →</a>
+                </div>
+                <div id="eventsContainer" class="items-container">
+                    <div class="loading-message">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading events...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Create Post Modal -->
+    <div class="modal-overlay" id="postModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="postModalTitle">Create New Post</h2>
+                <button class="modal-close" id="btnClosePostModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm">
+                    <div class="form-group">
+                        <label for="postTitle">Title *</label>
+                        <input type="text" id="postTitle" placeholder="Enter post title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postType">Type *</label>
+                        <select id="postType" required>
+                            <option value="">Select Type</option>
+                            <option value="announcement">Announcement</option>
+                            <option value="achievement">Achievement</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postCategory">Category *</label>
+                        <input type="text" id="postCategory" placeholder="e.g., Academic, Sports, General" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postContent">Content *</label>
+                        <textarea id="postContent" rows="6" placeholder="Write your content here..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postImage">Upload Image (Optional)</label>
+                        <input type="file" id="postImage" accept="image/*">
+                        <div class="image-preview" id="postImagePreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="btnCancelPost">Cancel</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Publish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Create New Event</h2>
+                <button class="modal-close" id="btnCloseEventModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Event Title *</label>
+                        <input type="text" id="eventTitle" placeholder="Enter event title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDescription">Description *</label>
+                        <textarea id="eventDescription" rows="4" placeholder="Describe your event..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventDate">Event Date *</label>
+                            <input type="date" id="eventDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventTime">Event Time *</label>
+                            <input type="time" id="eventTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventLocation">Location</label>
+                        <input type="text" id="eventLocation" placeholder="Event location">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventCategory">Category *</label>
+                        <input type="text" id="eventCategory" placeholder="e.g., Sports, Academic, Cultural" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventImage">Upload Image (Optional)</label>
+                        <input type="file" id="eventImage" accept="image/*">
+                        <div class="image-preview" id="eventImagePreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="btnCancelEvent">Cancel</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-calendar-check"></i>
+                            Create Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            getDoc,
+            updateDoc,
+            deleteDoc, 
+            doc, 
+            query, 
+            orderBy, 
+            where, 
+            limit,
+            serverTimestamp,
+            Timestamp
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhYfsYEJGaBvSRsY1bbujHCyKLGXH1W28",
+            authDomain: "mjs-fehimaa.firebaseapp.com",
+            projectId: "mjs-fehimaa",
+            storageBucket: "mjs-fehimaa.firebasestorage.app",
+            messagingSenderId: "509657178337",
+            appId: "1:509657178337:web:e0e6aa686b5ee4697157a0",
+            measurementId: "G-BXD5Q1MY6V"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        console.log('Firebase initialized successfully');
+
+        // Make services available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.signOut = signOut;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.getDocs = getDocs;
+        window.getDoc = getDoc;
+        window.updateDoc = updateDoc;
+        window.deleteDoc = deleteDoc;
+        window.doc = doc;
+        window.query = query;
+        window.orderBy = orderBy;
+        window.where = where;
+        window.limit = limit;
+        window.serverTimestamp = serverTimestamp;
+        window.Timestamp = Timestamp;
+        window.storageRef = ref;
+        window.uploadBytes = uploadBytes;
+        window.getDownloadURL = getDownloadURL;
+
+        console.log('Firebase functions exposed globally');
+
+        // Load dashboard script
+        const dashScript = document.createElement('script');
+        dashScript.src = 'dashboard.js';
+        dashScript.onerror = () => console.error('Failed to load dashboard.js');
+        dashScript.onload = () => console.log('Dashboard script loaded');
+        document.body.appendChild(dashScript);
+    </script>
+
+</body>
+</html>
